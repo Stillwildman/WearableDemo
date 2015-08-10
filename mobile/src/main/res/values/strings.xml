@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">WearableDemo</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="BigTextStyle">BigTextStyle</string>
+    <string name="InboxStyle">InboxStyle</string>
+</resources>

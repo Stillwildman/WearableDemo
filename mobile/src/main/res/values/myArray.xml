@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <array name="List_Items">
+        <item>Notification + Intent</item>
+        <item>Notification &amp; Action Button</item>
+        <item>WearableExtender</item>
+        <item>Big Picture Style</item>
+        <item>Add Pages</item>
+    </array>
+
+</resources>
