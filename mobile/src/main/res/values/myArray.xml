@@ -4,9 +4,10 @@
     <array name="List_Items">
         <item>Notification + Intent</item>
         <item>Notification &amp; Action Button</item>
-        <item>WearableExtender</item>
+        <item>Wearable-Only</item>
         <item>Big Picture Style</item>
-        <item>Add Pages</item>
+        <item>Multi-Pages</item>
+        <item>Stacking Notification</item>
     </array>
 
 </resources>

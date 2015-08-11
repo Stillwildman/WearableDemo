@@ -2,6 +2,8 @@
     <string name="app_name">WearableDemo</string>
 
     <string name="action_settings">Settings</string>
+    <string name="NotificationMassage">Your Notification Massage</string>
     <string name="BigTextStyle">BigTextStyle</string>
     <string name="InboxStyle">InboxStyle</string>
+    <string name="GroupIdHint">Enter a Group ID</string>
 </resources>

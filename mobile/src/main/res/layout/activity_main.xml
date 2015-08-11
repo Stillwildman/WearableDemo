@@ -21,14 +21,15 @@
             android:layout_height="wrap_content"
             android:id="@+id/clearBtn"
             android:onClick="clearClick"
-            android:src="@android:drawable/ic_notification_clear_all"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
             android:scaleType="centerCrop" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textInput"
-            android:imeOptions="actionSend" />
+            android:imeOptions="actionDone"
+            android:hint="@string/NotificationMassage" />
     </LinearLayout>
 
     <LinearLayout
@@ -37,7 +38,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:animateLayoutChanges="true"
-        android:gravity="center">
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
 
         <CheckBox
             android:layout_width="wrap_content"
@@ -54,7 +57,8 @@
             android:id="@+id/check_InboxStyle"
             android:textSize="20sp"
             android:layout_weight="0"
-            android:layout_marginLeft="10dp" />
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -70,8 +74,16 @@
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:id="@+id/demoList"
-        android:layout_gravity="center_horizontal"
-        tools:listitem="@android:layout/simple_list_item_2" />
+        tools:listitem="@android:layout/simple_list_item_2"
+        android:layout_weight="1"
+        android:dividerHeight="1dp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/groupIdInput"
+        android:imeOptions="actionDone"
+        android:hint="@string/GroupIdHint" />
 </LinearLayout>
