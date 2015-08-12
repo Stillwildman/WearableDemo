@@ -6,4 +6,9 @@
     <string name="BigTextStyle">BigTextStyle</string>
     <string name="InboxStyle">InboxStyle</string>
     <string name="GroupIdHint">Enter a Group ID</string>
+    <string name="Notify_Basic">Basic Notification</string>
+    <string name="Notify_Advanced">Advanced Notification</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
