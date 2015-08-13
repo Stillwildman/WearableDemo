@@ -38,8 +38,7 @@
         android:layout_gravity="center"
         android:animateLayoutChanges="true"
         android:gravity="center"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp">
+        android:layout_marginTop="5dp">
 
         <CheckBox
             android:layout_width="wrap_content"

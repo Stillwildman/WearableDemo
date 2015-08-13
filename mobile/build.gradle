@@ -5,7 +5,7 @@ android {
         BrackRelease {
             keyAlias 'Brack'
             keyPassword 'android'
-            storeFile file('C:/Users/vincent.chang/.android/release.keystore')
+            storeFile file('C:/Users/Brack/.android/release.keystore')
             storePassword 'android'
         }
     }
@@ -32,7 +32,7 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:22.2.1'
-    compile "com.android.support:support-v4:22.2.1"
+    compile 'com.android.support:support-v4:22.2.1'
     compile 'com.google.android.gms:play-services:7.5.0'
     wearApp project(':wear')
 }
