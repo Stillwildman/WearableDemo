@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">WearableDemo</string>
-    <string name="hello_round">Hello Round World!</string>
     <string name="hello_square">Hello Square World!</string>
-    <string name="notify_app_name">WearableNotify</string>
+    <string name="title_ambient_activity">WearableNotify</string>
+    <string name="title_card_activity">CustomCards</string>
+    <string name="card_title">Custom Card</string>
+    <string name="card_text">Piece of a cake</string>
+    <string name="title_list_activity">ListActivity</string>
+
+    <string name="action_settings">Settings</string>
 </resources>

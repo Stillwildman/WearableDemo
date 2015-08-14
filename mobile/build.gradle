@@ -5,7 +5,7 @@ android {
         BrackRelease {
             keyAlias 'Brack'
             keyPassword 'android'
-            storeFile file('C:/Users/Brack/.android/release.keystore')
+            storeFile file('C:/Users/vincent.chang/.android/release.keystore')
             storePassword 'android'
         }
     }

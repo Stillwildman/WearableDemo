@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.wearable.view.BoxInsetLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/cardContainer"
+    tools:context="com.vincent.wearabledemo.CardActivity"
+    tools:deviceIds="wear">
+
+    <android.support.wearable.view.CardScrollView
+        android:id="@+id/card_scroll_view"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        app:layout_box="bottom"
+        android:background="@color/light_grey">
+
+        <android.support.wearable.view.CardFrame
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_gravity="bottom">
+
+            <ScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <LinearLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:fontFamily="sans-serif-light"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:text="@string/card_title"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"/>
+
+                    <TextView
+                        android:fontFamily="sans-serif-light"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:text="@string/card_text"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"/>
+
+                </LinearLayout>
+
+            </ScrollView>
+
+        </android.support.wearable.view.CardFrame>
+
+    </android.support.wearable.view.CardScrollView>
+
+</android.support.wearable.view.BoxInsetLayout>

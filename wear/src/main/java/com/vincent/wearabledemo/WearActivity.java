@@ -12,7 +12,6 @@ import android.view.View;
 
 public class WearActivity extends Activity {
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -31,14 +30,15 @@ public class WearActivity extends Activity {
 
     public void testBtnClick(View v)
     {
-        showMyNotification();
-        //Intent intent = new Intent(this, NotificationActivity.class);
-        //startActivity(intent);
+        //Intent intent = new Intent(this, AmbientActivity.class);
+        Intent intent = new Intent(this, CardActivity.class);
+        startActivity(intent);
+
+        //showMyNotification(intent);
     }
 
-    private void showMyNotification()
+    private void showMyNotification(Intent intent)
     {
-        Intent intent = new Intent(this, NotificationActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity
                 (this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -49,10 +49,9 @@ public class WearActivity extends Activity {
         Notification notifBuilder = new Notification.Builder(this)
                 .setSmallIcon(android.R.drawable.ic_menu_compass)
                 .setContentTitle("Customization!")
-                .setContentText(".....0.0")
                 .extend(new Notification.WearableExtender()
-                        .setDisplayIntent(pendingIntent)
                         .setContentIcon(android.R.drawable.ic_menu_camera)
+                        .setDisplayIntent(pendingIntent)
                         .setCustomSizePreset(Notification.WearableExtender.SIZE_LARGE))
                 .build();
 
