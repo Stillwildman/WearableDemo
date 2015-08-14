@@ -48,8 +48,11 @@ public class WearActivity extends Activity {
 
         Notification notifBuilder = new Notification.Builder(this)
                 .setSmallIcon(android.R.drawable.ic_menu_compass)
+                .setContentTitle("Customization!")
+                .setContentText(".....0.0")
                 .extend(new Notification.WearableExtender()
                         .setDisplayIntent(pendingIntent)
+                        .setContentIcon(android.R.drawable.ic_menu_camera)
                         .setCustomSizePreset(Notification.WearableExtender.SIZE_LARGE))
                 .build();
 

@@ -197,18 +197,23 @@ public class BasicNotificationFragment extends Fragment {
         NotificationCompat.Action marketAction = new NotificationCompat.Action
                 .Builder(android.R.drawable.ic_input_add, "Open Market", marketPendingIntent).build();
 
+        Intent customIntent = new Intent(getActivity(), NotificationActivity.class);
+        PendingIntent customPendingIntent = PendingIntent.getActivity(getActivity(), 0, customIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
         NotificationCompat.WearableExtender wearableExtender = new NotificationCompat.WearableExtender()
                 .addAction(mapAction)
                 .addAction(marketAction)
-                .setHintHideIcon(true)
-                .setBackground(BitmapFactory.decodeResource(getResources(), android.R.color.holo_blue_dark));
+                .setHintHideIcon(true);
+                //.setDisplayIntent(customPendingIntent)
+                //.setCustomSizePreset(NotificationCompat.WearableExtender.SIZE_LARGE);
+                //.setBackground(BitmapFactory.decodeResource(getResources(), android.R.color.holo_blue_dark));
 
         NotificationCompat.Builder notiBuilder = new NotificationCompat.Builder(getActivity())
+                .setSmallIcon(R.mipmap.sand_icon)
                 .setContentTitle("Wearable-Only Feature")
                 .setContentText(input)
                 .setContentIntent(pendingIntent)
                 .extend(wearableExtender)
-                .setSmallIcon(R.mipmap.sand_icon)
                 .setAutoCancel(true);
 
         sandNotification(notiBuilder, input);
