@@ -1,4 +1,4 @@
-package com.vincent.wearabledemo;
+package com.vincent.wearabledemo.adapter;
 
 import android.content.Context;
 import android.support.wearable.view.WearableListView;
@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.vincent.wearabledemo.R;
 
 public class ListAdapter extends WearableListView.Adapter {
 

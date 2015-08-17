@@ -1,4 +1,4 @@
-package com.vincent.wearabledemo;
+package com.vincent.wearabledemo.view;
 
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
@@ -7,6 +7,8 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.vincent.wearabledemo.R;
 
 public class WearableListItemLayout extends LinearLayout implements WearableListView.OnCenterProximityListener {
 

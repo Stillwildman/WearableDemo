@@ -1,4 +1,4 @@
-package com.vincent.wearabledemo;
+package com.vincent.wearabledemo.fragment;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -22,6 +22,9 @@ import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.vincent.wearabledemo.NotificationActivity;
+import com.vincent.wearabledemo.R;
 
 public class BasicNotificationFragment extends Fragment {
 

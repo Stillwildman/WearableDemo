@@ -1,4 +1,4 @@
-package com.vincent.wearabledemo;
+package com.vincent.wearabledemo.activity;
 
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -6,9 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -17,12 +14,28 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.wearable.DataApi;
+import com.google.android.gms.wearable.DataEventBuffer;
+import com.vincent.wearabledemo.fragment.BasicNotificationFragment;
+import com.vincent.wearabledemo.R;
+import com.vincent.wearabledemo.adapter.SectionsPagerAdapter;
+
 import java.io.FileNotFoundException;
 
-public class MainActivity extends AppCompatActivity implements ActionBar.TabListener {
-
+public class MainActivity extends AppCompatActivity implements
+        ActionBar.TabListener,
+        DataApi.DataListener,
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener
+{
     SectionsPagerAdapter pagerAdapter;
     ViewPager viewPager;
+
+    private static final String COUNT_KEY = "VincentWear";
+    private GoogleApiClient gac;
+    private int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -59,50 +72,13 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
     }
 
     @Override
-    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-    }
+    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {}
 
     @Override
-    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-    }
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {}
 
-    public class SectionsPagerAdapter extends FragmentPagerAdapter
-    {
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
 
-        @Override
-        public Fragment getItem(int position)
-        {
-            switch (position)
-            {
-                case 0:
-                    return BasicNotificationFragment.newInstance(position + 1);
 
-                case 1:
-                    return AdvancedFeature.newInstance(position + 1);
-            }
-            return null;
-        }
-
-        @Override
-        public int getCount() {
-            return 2;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position)
-        {
-            switch (position) {
-                case 0:
-                    return getString(R.string.Notify_Basic);
-                case 1:
-                    return getString(R.string.Notify_Advanced);
-            }
-            return null;
-        }
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
@@ -126,6 +102,28 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
             }
         }
     }
+
+
+    @Override
+    public void onConnected(Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onDataChanged(DataEventBuffer dataEventBuffer) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -1,9 +1,13 @@
-package com.vincent.wearabledemo;
+package com.vincent.wearabledemo.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.wearable.view.WearableListView;
 import android.util.Log;
+
+import com.vincent.wearabledemo.R;
+
+import com.vincent.wearabledemo.adapter.ListAdapter;
 
 public class ListActivity extends Activity implements WearableListView.ClickListener {
 
@@ -25,7 +29,7 @@ public class ListActivity extends Activity implements WearableListView.ClickList
     public void onClick(WearableListView.ViewHolder viewHolder)
     {
         Integer tag = (Integer) viewHolder.itemView.getTag();
-        Log.i("What the Hell", "" + tag);
+        Log.i("Do Something~", "" + tag);
     }
 
     @Override
