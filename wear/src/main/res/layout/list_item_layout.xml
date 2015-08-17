@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.vincent.wearabledemo.WearableListitemLayout
+<com.vincent.wearabledemo.WearableListItemLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:gravity="center_vertical"
     android:layout_width="match_parent"
@@ -11,7 +11,7 @@
         android:layout_height="20dp"
         android:layout_margin="16dp"
         android:layout_width="20dp"
-        android:src="@android:drawable/star_big_off" />
+        android:src="@drawable/circle_shape" />
 
     <TextView
         android:id="@+id/nameText"
@@ -24,4 +24,4 @@
         android:textColor="@color/green"
         android:textSize="16sp"/>
 
-</com.vincent.wearabledemo.WearableListitemLayout>
+</com.vincent.wearabledemo.WearableListItemLayout>

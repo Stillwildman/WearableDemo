@@ -31,7 +31,9 @@ public class WearActivity extends Activity {
     public void testBtnClick(View v)
     {
         //Intent intent = new Intent(this, AmbientActivity.class);
-        Intent intent = new Intent(this, CardActivity.class);
+        //Intent intent = new Intent(this, CardActivity.class);
+        Intent intent = new Intent(this, ListActivity.class);
+
         startActivity(intent);
 
         //showMyNotification(intent);
