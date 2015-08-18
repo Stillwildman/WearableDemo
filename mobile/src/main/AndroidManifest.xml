@@ -20,14 +20,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".NotificationActivity"
-            android:label="@string/notify_app_name"
-            android:exported="true"
-            android:allowEmbedded="true"
-            android:taskAffinity="" >
-        </activity>
-
     </application>
 
 </manifest>

@@ -13,9 +13,13 @@ import com.vincent.wearabledemo.R;
 
 public class AmbientActivity extends WearableActivity {
 
+    private static final String DATA_KEY = "Brack";
+
     private BoxInsetLayout container;
     private TextView testText;
     private int count = 0;
+
+    public static boolean fired;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +30,14 @@ public class AmbientActivity extends WearableActivity {
 
         container = (BoxInsetLayout) findViewById(R.id.container);
         testText = (TextView) findViewById(R.id.testNote);
+
+        Bundle syncData = this.getIntent().getExtras();
+        updateText(syncData.getString(DATA_KEY));
+    }
+
+    private void updateText(String text)
+    {
+        testText.setText(text);
     }
 
     public void testImgClick(View v) {

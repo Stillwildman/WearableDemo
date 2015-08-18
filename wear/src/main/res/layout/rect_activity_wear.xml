@@ -15,5 +15,15 @@
         android:layout_height="wrap_content"
         android:id="@+id/TestBtn"
         android:src="@android:drawable/ic_dialog_info"
-        android:onClick="testBtnClick" />
+        android:onClick="testBtnClick"
+        android:layout_marginBottom="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/debugText"
+        android:background="@android:color/darker_gray"
+        android:textColor="@android:color/primary_text_light" />
+
 </LinearLayout>

@@ -9,18 +9,16 @@ import android.os.Bundle;
 import android.support.wearable.view.WatchViewStub;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.wearable.DataApi;
 import com.google.android.gms.wearable.DataEvent;
 import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataItem;
 import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.DataMapItem;
-import com.google.android.gms.wearable.PutDataMapRequest;
-import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 import com.vincent.wearabledemo.R;
 
@@ -29,10 +27,12 @@ public class WearActivity extends Activity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener
 {
-    private static final String COUNT_KEY = "VincentWear";
+    private TextView debugText;
+
+    private static final String DATA_KEY = "Brack";
+    private static final String DATA_PATH = "/demo";
 
     private GoogleApiClient gac;
-    private int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -45,14 +45,14 @@ public class WearActivity extends Activity implements
         stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
             @Override
             public void onLayoutInflated(WatchViewStub stub) {
-
+                debugText = (TextView) stub.findViewById(R.id.debugText);
             }
         });
 
         gac = new GoogleApiClient.Builder(this)
-                .addApi(Wearable.API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
+                .addApi(Wearable.API)
                 .build();
     }
 
@@ -92,34 +92,14 @@ public class WearActivity extends Activity implements
         Log.i("Notify!!!", "DONE!!!");
     }
 
-    // Create a data map and put data in it!
-    private void increaseCounter()
+    public void textUpdate(final int count)
     {
-        PutDataMapRequest putDataMapReq = PutDataMapRequest.create("/count");
-
-        putDataMapReq.getDataMap().putInt(COUNT_KEY, count++);
-
-        PutDataRequest putDataReq = putDataMapReq.asPutDataRequest();
-        PendingResult<DataApi.DataItemResult> pendingResult = Wearable.DataApi.putDataItem(gac, putDataReq);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        gac.connect();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Wearable.DataApi.removeListener(gac, this);
-        gac.disconnect();
-    }
-
-    @Override
-    public void onConnected(Bundle bundle) {
-        Wearable.DataApi.addListener(gac, this);
-        Log.d("GAC Status", "onConnected: " + bundle);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                debugText.setText(String.valueOf(count));
+            }
+        });
     }
 
     @Override
@@ -131,12 +111,12 @@ public class WearActivity extends Activity implements
             {
                 //DataItem Changed
                 DataItem items = event.getDataItem();
-                if (items.getUri().getPath().compareTo("/count") == 0)
+
+                if (items.getUri().getPath().compareTo(DATA_PATH) == 0)
                 {
                     DataMap dataMap = DataMapItem.fromDataItem(items).getDataMap();
-                    updateCount(dataMap.getInt(COUNT_KEY));
+                    textUpdate(dataMap.getInt(DATA_KEY));
                 }
-
             }
             else if (event.getType() == DataEvent.TYPE_DELETED) {
                 Log.i("Item Deleted!", "DELETED!!!!!!!");
@@ -144,18 +124,34 @@ public class WearActivity extends Activity implements
         }
     }
 
-    private void updateCount(int count)
-    {
-        Log.i("Update Count", "" + count);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        gac.connect();
+        Log.d("WearGAC_Status", "GAC Connected!!");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Wearable.DataApi.removeListener(gac, this);
+        gac.disconnect();
+        Log.d("WearGAC_Status", "GAC Disconnected!!");
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        Wearable.DataApi.addListener(gac, this);
+        Log.d("WearGAC_Status", "onConnected: " + bundle);
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-        Log.d("GAC Status", "onDisconnected: " + i);
+        Log.d("WearGAC_Status", "onDisconnected: " + i);
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.d("GAC Status", "ConnectionFailed: " + connectionResult);
+        Log.d("WearGAC_Status", "ConnectionFailed: " + connectionResult);
     }
 }

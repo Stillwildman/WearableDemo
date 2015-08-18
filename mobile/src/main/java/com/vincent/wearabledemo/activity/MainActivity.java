@@ -14,36 +14,16 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.wearable.DataApi;
-import com.google.android.gms.wearable.DataEvent;
-import com.google.android.gms.wearable.DataEventBuffer;
-import com.google.android.gms.wearable.DataItem;
-import com.google.android.gms.wearable.DataMap;
-import com.google.android.gms.wearable.DataMapItem;
-import com.google.android.gms.wearable.PutDataMapRequest;
-import com.google.android.gms.wearable.PutDataRequest;
-import com.google.android.gms.wearable.Wearable;
-import com.vincent.wearabledemo.fragment.BasicNotificationFragment;
 import com.vincent.wearabledemo.R;
 import com.vincent.wearabledemo.adapter.SectionsPagerAdapter;
+import com.vincent.wearabledemo.fragment.BasicNotificationFragment;
 
 import java.io.FileNotFoundException;
 
-public class MainActivity extends AppCompatActivity implements
-        ActionBar.TabListener,
-        DataApi.DataListener,
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener
-{
+public class MainActivity extends AppCompatActivity implements ActionBar.TabListener {
+
     SectionsPagerAdapter pagerAdapter;
     ViewPager viewPager;
-
-    private static final String COUNT_KEY = "VincentWear";
-    private GoogleApiClient gac;
-    private int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -67,86 +47,13 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
 
-        for (int i = 0; i < pagerAdapter.getCount(); i++) {
+        for (int i = 0; i < pagerAdapter.getCount(); i++)
+        {
             actionBar.addTab(actionBar.newTab()
                     .setText(pagerAdapter.getPageTitle(i))
                     .setTabListener(this));
         }
-
-        gac = new GoogleApiClient.Builder(this)
-                .addApi(Wearable.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
     }
-
-    // Create a data map and put data in it!
-    private void increaseCounter()
-    {
-        PutDataMapRequest putDataMapReq = PutDataMapRequest.create("/count");
-
-        putDataMapReq.getDataMap().putInt(COUNT_KEY, count++);
-
-        PutDataRequest putDataReq = putDataMapReq.asPutDataRequest();
-        PendingResult<DataApi.DataItemResult> pendingResult = Wearable.DataApi.putDataItem(gac, putDataReq);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        gac.connect();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Wearable.DataApi.removeListener(gac, this);
-        gac.disconnect();
-    }
-
-    @Override
-    public void onConnected(Bundle bundle) {
-        Wearable.DataApi.addListener(gac, this);
-        Log.d("GAC Status", "onConnected: " + bundle);
-    }
-
-    @Override
-    public void onDataChanged(DataEventBuffer dataEventBuffer)
-    {
-        for (DataEvent event: dataEventBuffer)
-        {
-            if (event.getType() == DataEvent.TYPE_CHANGED)
-            {
-                //DataItem Changed
-                DataItem items = event.getDataItem();
-                if (items.getUri().getPath().compareTo("/count") == 0)
-                {
-                    DataMap dataMap = DataMapItem.fromDataItem(items).getDataMap();
-                    updateCount(dataMap.getInt(COUNT_KEY));
-                }
-
-            }
-            else if (event.getType() == DataEvent.TYPE_DELETED) {
-                Log.i("Item Deleted!", "DELETED!!!!!!!");
-            }
-        }
-    }
-
-    private void updateCount(int count)
-    {
-        Log.i("Update Count", "" + count);
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        Log.d("GAC Status", "onDisconnected: " + i);
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.d("GAC Status", "ConnectionFailed: " + connectionResult);
-    }
-
 
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {

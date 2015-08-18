@@ -23,7 +23,6 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.vincent.wearabledemo.NotificationActivity;
 import com.vincent.wearabledemo.R;
 
 public class BasicNotificationFragment extends Fragment {
@@ -200,15 +199,10 @@ public class BasicNotificationFragment extends Fragment {
         NotificationCompat.Action marketAction = new NotificationCompat.Action
                 .Builder(android.R.drawable.ic_input_add, "Open Market", marketPendingIntent).build();
 
-        Intent customIntent = new Intent(getActivity(), NotificationActivity.class);
-        PendingIntent customPendingIntent = PendingIntent.getActivity(getActivity(), 0, customIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
         NotificationCompat.WearableExtender wearableExtender = new NotificationCompat.WearableExtender()
                 .addAction(mapAction)
                 .addAction(marketAction)
                 .setHintHideIcon(true);
-                //.setDisplayIntent(customPendingIntent)
-                //.setCustomSizePreset(NotificationCompat.WearableExtender.SIZE_LARGE);
                 //.setBackground(BitmapFactory.decodeResource(getResources(), android.R.color.holo_blue_dark));
 
         NotificationCompat.Builder notiBuilder = new NotificationCompat.Builder(getActivity())
