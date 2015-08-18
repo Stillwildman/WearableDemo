@@ -16,8 +16,16 @@ import android.view.MenuItem;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.wearable.DataApi;
+import com.google.android.gms.wearable.DataEvent;
 import com.google.android.gms.wearable.DataEventBuffer;
+import com.google.android.gms.wearable.DataItem;
+import com.google.android.gms.wearable.DataMap;
+import com.google.android.gms.wearable.DataMapItem;
+import com.google.android.gms.wearable.PutDataMapRequest;
+import com.google.android.gms.wearable.PutDataRequest;
+import com.google.android.gms.wearable.Wearable;
 import com.vincent.wearabledemo.fragment.BasicNotificationFragment;
 import com.vincent.wearabledemo.R;
 import com.vincent.wearabledemo.adapter.SectionsPagerAdapter;
@@ -47,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements
         actionBar.setHomeButtonEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        pagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        pagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
 
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(pagerAdapter);
@@ -64,7 +72,81 @@ public class MainActivity extends AppCompatActivity implements
                     .setText(pagerAdapter.getPageTitle(i))
                     .setTabListener(this));
         }
+
+        gac = new GoogleApiClient.Builder(this)
+                .addApi(Wearable.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
     }
+
+    // Create a data map and put data in it!
+    private void increaseCounter()
+    {
+        PutDataMapRequest putDataMapReq = PutDataMapRequest.create("/count");
+
+        putDataMapReq.getDataMap().putInt(COUNT_KEY, count++);
+
+        PutDataRequest putDataReq = putDataMapReq.asPutDataRequest();
+        PendingResult<DataApi.DataItemResult> pendingResult = Wearable.DataApi.putDataItem(gac, putDataReq);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        gac.connect();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Wearable.DataApi.removeListener(gac, this);
+        gac.disconnect();
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        Wearable.DataApi.addListener(gac, this);
+        Log.d("GAC Status", "onConnected: " + bundle);
+    }
+
+    @Override
+    public void onDataChanged(DataEventBuffer dataEventBuffer)
+    {
+        for (DataEvent event: dataEventBuffer)
+        {
+            if (event.getType() == DataEvent.TYPE_CHANGED)
+            {
+                //DataItem Changed
+                DataItem items = event.getDataItem();
+                if (items.getUri().getPath().compareTo("/count") == 0)
+                {
+                    DataMap dataMap = DataMapItem.fromDataItem(items).getDataMap();
+                    updateCount(dataMap.getInt(COUNT_KEY));
+                }
+
+            }
+            else if (event.getType() == DataEvent.TYPE_DELETED) {
+                Log.i("Item Deleted!", "DELETED!!!!!!!");
+            }
+        }
+    }
+
+    private void updateCount(int count)
+    {
+        Log.i("Update Count", "" + count);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.d("GAC Status", "onDisconnected: " + i);
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.d("GAC Status", "ConnectionFailed: " + connectionResult);
+    }
+
 
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
@@ -76,9 +158,6 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {}
-
-
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
@@ -105,35 +184,16 @@ public class MainActivity extends AppCompatActivity implements
 
 
     @Override
-    public void onConnected(Bundle bundle) {
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onDataChanged(DataEventBuffer dataEventBuffer) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
