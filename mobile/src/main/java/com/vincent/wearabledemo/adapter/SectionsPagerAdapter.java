@@ -36,7 +36,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter
 
     @Override
     public int getCount() {
-        return 2;
+        return 3;
     }
 
     @Override
@@ -48,6 +48,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter
                 return context.getString(R.string.Notify_Basic);
             case 1:
                 return context.getString(R.string.Notify_Advanced);
+            case 2:
+                return context.getString(R.string.Notify_Map);
         }
         return null;
     }

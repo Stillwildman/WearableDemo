@@ -8,8 +8,6 @@
     <string name="GroupIdHint">Enter a Group ID</string>
     <string name="Notify_Basic">Basic Notification</string>
     <string name="Notify_Advanced">Advanced Feature</string>
-    <string name="notify_app_name">WearableNotify</string>
+    <string name="Notify_Map">Map View</string>
 
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
