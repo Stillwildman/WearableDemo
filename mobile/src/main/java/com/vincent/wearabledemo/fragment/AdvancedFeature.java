@@ -1,5 +1,6 @@
 package com.vincent.wearabledemo.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -14,6 +15,7 @@ import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 import com.vincent.wearabledemo.R;
+import com.vincent.wearabledemo.activity.MapActivity;
 
 public class AdvancedFeature extends Fragment implements
         GoogleApiClient.ConnectionCallbacks,
@@ -48,6 +50,7 @@ public class AdvancedFeature extends Fragment implements
         View rootView = inflater.inflate(R.layout.fragment_advanced_feature, container, false);
 
         Button syncBtn = (Button) rootView.findViewById(R.id.syncButton);
+        Button mapBtn = (Button) rootView.findViewById(R.id.mapButton);
 
         gac = new GoogleApiClient.Builder(getActivity())
                 .addConnectionCallbacks(this)
@@ -59,6 +62,14 @@ public class AdvancedFeature extends Fragment implements
             @Override
             public void onClick(View v) {
                 increaseCounter();
+            }
+        });
+
+        mapBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), MapActivity.class);
+                startActivity(intent);
             }
         });
 

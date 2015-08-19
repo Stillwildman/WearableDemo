@@ -30,13 +30,16 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter
 
             case 1:
                 return AdvancedFeature.newInstance(position + 1);
+
+           /* case 2:
+                return MapFragment.newInstance(position + 1);*/
         }
         return null;
     }
 
     @Override
     public int getCount() {
-        return 3;
+        return 2;
     }
 
     @Override

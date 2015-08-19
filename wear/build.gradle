@@ -1,18 +1,17 @@
 apply plugin: 'com.android.application'
 
-
 android {
     signingConfigs {
         BrackRelease {
             keyAlias 'Brack'
             keyPassword 'android'
-            storeFile file('C:/Users/Brack/.android/release.keystore')
+            storeFile file('C:/Users/vincent.chang/.android/release.keystore')
             storePassword 'android'
         }
-        MapDebig {
+        MapDebug {
+            storeFile file('C:/Users/vincent.chang/.android/debug.keystore')
             keyAlias 'androiddebugkey'
             keyPassword 'android'
-            storeFile file('C:/Users/Brack/.android/debug.keystore')
             storePassword 'android'
         }
     }
@@ -24,7 +23,7 @@ android {
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
-        signingConfig signingConfigs.BrackRelease
+        signingConfig signingConfigs.MapDebug
     }
     buildTypes {
         release {

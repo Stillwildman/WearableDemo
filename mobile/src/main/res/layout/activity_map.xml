@@ -1,0 +1,95 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.vincent.wearabledemo.activity.MapActivity"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ControlLayout"
+        android:gravity="center_vertical|end"
+        android:background="@color/md_grey_100"
+        android:layout_weight="0"
+        android:animateLayoutChanges="true">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/loadingStatus"
+            android:indeterminate="false"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/locateButton"
+            android:src="@android:drawable/ic_menu_mylocation"
+            android:scaleType="centerCrop"
+            android:onClick="locateClick" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/Line1"
+        android:layout_width="wrap_content"
+        android:layout_height="2dp"
+        android:layout_marginBottom="-1dp"
+        android:layout_marginTop="1dp"
+        android:background="@android:color/black" />
+
+    <LinearLayout
+        android:id="@+id/MapArea"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:isScrollContainer="true"
+        android:overScrollMode="always"
+        android:scrollbars="horizontal|vertical"
+        android:layout_weight="1">
+
+        <com.google.android.maps.MapView
+            android:id="@+id/MapView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:apiKey="0nBP-9OdMeXA2iC6Qdpy6NjXh6wKMZN9DhaakFQ"
+            android:clickable="true"
+            android:layerType="software">
+        </com.google.android.maps.MapView>
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/Line2"
+        android:layout_width="wrap_content"
+        android:layout_height="2dp"
+        android:layout_marginBottom="-1dp"
+        android:layout_marginTop="1dp"
+        android:background="@android:color/black" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:gravity="center_vertical">
+
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/searchTextInput"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/searchBuuton"
+            android:layout_weight="0"
+            android:src="@android:drawable/ic_menu_search"
+            android:scaleType="centerCrop"
+            android:onClick="searchClick" />
+    </LinearLayout>
+</LinearLayout>

@@ -9,5 +9,6 @@
     <string name="Notify_Basic">Basic Notification</string>
     <string name="Notify_Advanced">Advanced Feature</string>
     <string name="Notify_Map">Map View</string>
+    <string name="title_activity_map">MapActivity</string>
 
 </resources>
