@@ -1,4 +1,4 @@
-package com.vincent.wearabledemo.fragment;
+package com.vincent.wearabledemo;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,8 +14,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
-import com.vincent.wearabledemo.R;
-import com.vincent.wearabledemo.activity.MapActivity;
 
 public class AdvancedFeature extends Fragment implements
         GoogleApiClient.ConnectionCallbacks,

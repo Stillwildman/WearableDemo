@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.vincent.wearabledemo.activity.MapActivity"
+    tools:context="com.vincent.wearabledemo.MapActivity"
     android:orientation="vertical">
 
     <LinearLayout

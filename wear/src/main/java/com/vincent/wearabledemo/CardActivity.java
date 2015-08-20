@@ -1,4 +1,4 @@
-package com.vincent.wearabledemo.activity;
+package com.vincent.wearabledemo;
 
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;

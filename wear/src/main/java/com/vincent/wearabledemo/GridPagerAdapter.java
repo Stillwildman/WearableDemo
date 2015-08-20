@@ -1,4 +1,4 @@
-package com.vincent.wearabledemo.adapter;
+package com.vincent.wearabledemo;
 
 
 import android.app.Fragment;
@@ -8,8 +8,6 @@ import android.graphics.drawable.Drawable;
 import android.support.wearable.view.CardFragment;
 import android.support.wearable.view.FragmentGridPagerAdapter;
 import android.view.Gravity;
-
-import com.vincent.wearabledemo.R;
 
 import java.util.List;
 

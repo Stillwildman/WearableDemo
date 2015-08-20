@@ -1,4 +1,4 @@
-package com.vincent.wearabledemo.view;
+package com.vincent.wearabledemo;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -15,7 +15,7 @@ import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.OverlayItem;
 import com.vincent.wearabledemo.R;
-import com.vincent.wearabledemo.activity.MapActivity;
+import com.vincent.wearabledemo.MapActivity;
 
 import java.util.ArrayList;
 import java.util.List;

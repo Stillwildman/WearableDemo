@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/cardContainer"
-    tools:context="com.vincent.wearabledemo.activity.CardActivity"
+    tools:context="com.vincent.wearabledemo.CardActivity"
     tools:deviceIds="wear">
 
     <android.support.wearable.view.CardScrollView

@@ -1,4 +1,4 @@
-package com.vincent.wearabledemo.Utils;
+package com.vincent.wearabledemo;
 
 import com.google.android.maps.GeoPoint;
 

@@ -1,4 +1,4 @@
-package com.vincent.wearabledemo.view;
+package com.vincent.wearabledemo;
 
 import android.graphics.Canvas;
 import android.graphics.Color;

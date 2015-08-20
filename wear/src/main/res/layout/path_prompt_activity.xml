@@ -1,0 +1,41 @@
+<android.support.wearable.view.BoxInsetLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/pathContainer"
+    tools:context="com.vincent.wearabledemo.activity.PahtPromptActivity"
+    tools:deviceIds="wear">
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".WearActivity"
+        tools:deviceIds="wear_square"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:textAppearance="@android:style/TextAppearance.Holo.Medium"
+            android:id="@+id/path_prompt_text"
+            android:background="@color/md_grey_800"
+            android:textColor="@color/md_white_1000"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:gravity="center" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/path_prompt_image"
+            android:padding="20dp" />
+
+    </LinearLayout>
+
+</android.support.wearable.view.BoxInsetLayout>
+

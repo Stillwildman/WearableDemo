@@ -1,4 +1,4 @@
-package com.vincent.wearabledemo.activity;
+package com.vincent.wearabledemo;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,8 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.vincent.wearabledemo.R;
 
 public class AmbientActivity extends WearableActivity {
 

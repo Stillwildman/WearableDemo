@@ -1,4 +1,4 @@
-package com.vincent.wearabledemo.activity;
+package com.vincent.wearabledemo;
 
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -14,10 +14,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.vincent.wearabledemo.R;
-import com.vincent.wearabledemo.adapter.SectionsPagerAdapter;
-import com.vincent.wearabledemo.fragment.BasicNotificationFragment;
-
 import java.io.FileNotFoundException;
 
 public class MainActivity extends AppCompatActivity implements ActionBar.TabListener {
@@ -32,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         setContentView(R.layout.activity_main);
 
         final ActionBar actionBar = getSupportActionBar();
-        actionBar.setHomeButtonEnabled(false);
+        //actionBar.setHomeButtonEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         pagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());

@@ -1,4 +1,4 @@
-package com.vincent.wearabledemo.activity;
+package com.vincent.wearabledemo;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -30,16 +30,16 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.wearable.PutDataMapRequest;
+import com.google.android.gms.wearable.PutDataRequest;
+import com.google.android.gms.wearable.Wearable;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
-import com.vincent.wearabledemo.R;
-import com.vincent.wearabledemo.Utils.PolyHelper;
-import com.vincent.wearabledemo.handler.JSONAddrHandler;
-import com.vincent.wearabledemo.view.DrawOverlay;
-import com.vincent.wearabledemo.view.SearchOverlay;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -55,15 +55,21 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class MapActivity extends com.google.android.maps.MapActivity implements LocationListener {
-
+public class MapActivity extends com.google.android.maps.MapActivity implements
+        LocationListener,
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener
+{
     private MapView mapView;
     private MapController mapControl;
     private GeoPoint GP;
@@ -75,6 +81,7 @@ public class MapActivity extends com.google.android.maps.MapActivity implements 
 
     private boolean enableTool;
     private boolean requestGPS;
+    private boolean countable;
 
     private int screenWidth;
     private int screenHeight;
@@ -82,6 +89,22 @@ public class MapActivity extends com.google.android.maps.MapActivity implements 
     private EditText typingText;
     private SearchOverlay searchOverlay;
     private DrawOverlay drawOverlay;
+    private List<Map<String, String>> directionList;
+    private TextView debugText;
+
+    private ArrayList<Poi> pois;
+    private String previousPath = "";
+    private boolean isPathChanged;
+
+    private GoogleApiClient gac;
+
+    private static final String DATA_TEXT_KEY = "path_text";
+    private static final String DATA_IMG_KEY = "path_image";
+    private static final String DATA_PATH = "/demo";
+
+    private static final int PATH_GO_STRAIGHT = 0;
+    private static final int PATH_TURN_RIGHT = 1;
+    private static final int PATH_TURN_LEFT = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -92,9 +115,16 @@ public class MapActivity extends com.google.android.maps.MapActivity implements 
 
         mapView = (MapView) findViewById(R.id.MapView);
         typingText = (EditText) findViewById(R.id.searchTextInput);
+        debugText = (TextView) findViewById(R.id.debugText);
 
         findMapControl();
         getScreenInfo();
+
+        gac = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(Wearable.API)
+                .build();
     }
 
     private void getScreenInfo()
@@ -418,7 +448,7 @@ public class MapActivity extends com.google.android.maps.MapActivity implements 
         else {
             double lat = myLocation.getLatitude();
             double lng = myLocation.getLongitude();
-            Log.i("MyPosition", ""+lat +" "+ lng);
+            Log.i("MyPosition", ""+lat +" , "+ lng);
 
             mapMove((int)(lat * 1E6),
                     (int)(lng * 1E6));
@@ -512,8 +542,9 @@ public class MapActivity extends com.google.android.maps.MapActivity implements 
 
     public void getDirectionInfo(String routeInJSON)
     {
-        List<Map<String, String>> dirList = new ArrayList<>();
+        directionList = new ArrayList<>();
         List<String> infoList = new ArrayList<>();
+        pois = new ArrayList<>();
         try
         {
             JSONObject jb = new JSONObject(routeInJSON);
@@ -567,7 +598,13 @@ public class MapActivity extends com.google.android.maps.MapActivity implements 
 
                 listItem.put("path", path);
 
-                dirList.add(listItem);
+                directionList.add(listItem);
+
+                String pathGoOn = "";
+                if (listItem.containsKey("pathGoOn"))
+                    pathGoOn = listItem.get("pathGoOn");
+
+                putPoi(path, startLocation.getString("lat"), startLocation.getString("lng"), pathGoOn);
             }
             JSONObject Dis = leg.getJSONObject("distance");
             JSONObject Dur = leg.getJSONObject("duration");
@@ -585,7 +622,6 @@ public class MapActivity extends com.google.android.maps.MapActivity implements 
             infoList.add(Distance);		//2
             infoList.add(Summary);		//3
 
-            //directionList = dirList;
             //pathInfoList = infoList;
 
             //directionPop();
@@ -596,14 +632,47 @@ public class MapActivity extends com.google.android.maps.MapActivity implements 
         }
     }
 
+    public void putPoi(String pathName, String lat, String lng, String pathInfo)
+    {
+        double Lat = Double.valueOf(lat);
+        double Lng = Double.valueOf(lng);
+
+        pois.add(new Poi(pathName, Lat, Lng, pathInfo));
+        countable = true;
+
+        Log.d("POI SIZE", "" + pois.size());
+
+        triggerLocationChange();
+    }
+
+    private void triggerLocationChange()
+    {
+        for (Poi poi : pois)
+        {
+            poi.setDistance(distance(
+                    myLocation.getLatitude(),
+                    myLocation.getLongitude(),
+                    poi.LAT,
+                    poi.LNG));
+        }
+        distanceSort(pois);
+        setNearestView();
+
+        Log.d("Location - Me & POI", myLocation.getLatitude()
+                + ","
+                + myLocation.getLongitude()
+                + "\n"
+                + pois.get(0).LAT + "," + pois.get(0).LNG);
+    }
+
     public void mapMove(int lat, int lng)
     {
         GP = new GeoPoint(lat, lng);
 
         mapControl.animateTo(GP);
 
-        if (mapView.getZoomLevel() < 17)
-            mapControl.setZoom(17);
+        if (mapView.getZoomLevel() < 18)
+            mapControl.setZoom(18);
 
         /*
         if (alreadyPop)
@@ -616,6 +685,87 @@ public class MapActivity extends com.google.android.maps.MapActivity implements 
         }
         mapFocusMove = false;
         */
+    }
+
+    private void distanceSort(ArrayList<Poi> poi)
+    {
+        Collections.sort(poi, new Comparator<Poi>() {
+            @Override
+            public int compare(Poi poi1, Poi poi2) {
+                return poi1.DISTANCE < poi2.DISTANCE ? -1 : 1;
+            }
+        });
+    }
+
+    public double distance(double lat1, double lng1, double lat2, double lng2)
+    {
+        double redLat1 = lat1 * Math.PI / 180;
+        double redLat2 = lat2 * Math.PI / 180;
+        double l = redLat1 - redLat2;
+        double p = (lng1 * Math.PI / 180) - (lng2 * Math.PI /180);
+
+        double distance = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(l/2), 2)
+                + Math.cos(redLat1) * Math.cos(redLat2)
+                * Math.pow(Math.sin(p/2), 2)));
+        distance = distance * 6378137.0;
+        distance = Math.round(distance * 10000) / 10000;
+
+        return distance;
+    }
+
+    private String distanceText(double distance)
+    {
+        if (distance < 1000)
+            return String.valueOf((int)distance) + "m";
+        else
+            return new DecimalFormat("#.00").format(distance / 1000) + "km";
+    }
+
+    public void setNearestView()
+    {
+        String nearestPath = pois.get(0).PATH_NAME;
+
+        if (!nearestPath.equals(previousPath))
+        {
+            previousPath = nearestPath;
+            isPathChanged = true;
+        }
+        String nearestDis = distanceText(pois.get(0).DISTANCE);
+
+        debugText.setText(nearestPath + " - " + nearestDis);
+
+        if (isPathChanged && pois.get(0).DISTANCE < 100)
+        {
+            String pathText = nearestPath.substring(nearestPath.indexOf("-")+1);
+            int directionOf = PATH_GO_STRAIGHT;
+
+            if (pathText.contains("右轉"))
+                directionOf = PATH_TURN_RIGHT;
+            else if (pathText.contains("左轉"))
+                directionOf = PATH_TURN_LEFT;
+
+            sendPathUpdateToWear(pathText, directionOf);
+
+            Log.d("NEED UPDATE!!!", pathText + directionOf);
+
+            isPathChanged = false;
+        }
+    }
+
+    private void sendPathUpdateToWear(String pathText, int pathImg)
+    {
+        if (gac.isConnected())
+        {
+            PutDataMapRequest putDataMapReq = PutDataMapRequest.create(DATA_PATH);
+
+            putDataMapReq.getDataMap().putString(DATA_TEXT_KEY, pathText);
+            putDataMapReq.getDataMap().putInt(DATA_IMG_KEY, pathImg);
+
+            PutDataRequest putDataReq = putDataMapReq.asPutDataRequest();
+            Wearable.DataApi.putDataItem(gac, putDataReq);
+
+            Log.i("DataItemPut!", pathText + " - " + pathImg);
+        }
     }
 
     @Override
@@ -641,6 +791,9 @@ public class MapActivity extends com.google.android.maps.MapActivity implements 
             Log.i("onState", "Resume else");
         }
         toastShort("LocationProvider : " + providerType);
+
+        gac.connect();
+        Log.d("GAC_Status", "GAC Connected!!");
     }
 
     @Override
@@ -662,27 +815,30 @@ public class MapActivity extends com.google.android.maps.MapActivity implements 
             myLayer.disableCompass();
             Log.i("onState", "Pause");
         }
+        gac.disconnect();
+        Log.d("GAC_Status", "GAC Disconnected!!");
     }
 
     @Override
     public void onLocationChanged(Location location)
     {
-        Log.v("mapLocation", location.toString());
+        Log.v("MapLocation", location.toString());
         myLocation = location;
 
-        /*
         if (countable && !(""+myLocation).equals("null"))
         {
             for (Poi poi : pois)
             {
-                poi.setDistance(distance(location.getLatitude(),
+                poi.setDistance(distance(
+                        location.getLatitude(),
                         location.getLongitude(),
-                        poi.getLatitude(),
-                        poi.getLongitude()));
+                        poi.LAT,
+                        poi.LNG));
             }
             distanceSort(pois);
             setNearestView();
         }
+        /*
         if (mapFocusMove)
         {
             GP = new GeoPoint((int)(location.getLatitude()*1E6), (int)(location.getLongitude()*1E6));
@@ -711,6 +867,23 @@ public class MapActivity extends com.google.android.maps.MapActivity implements 
     public void onProviderDisabled(String provider) {
         toastShort("DisabledProvider : " + provider);
     }
+
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        Log.d("GAC_Status", "onConnected: " + bundle);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.d("GAC_Status", "onDisconnected: " + i);
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.d("GAC_Status", "ConnectionFailed: " + connectionResult);
+    }
+
 
     public void toastShort (String message)
     {

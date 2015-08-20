@@ -1,4 +1,4 @@
-package com.vincent.wearabledemo.service;
+package com.vincent.wearabledemo;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +10,6 @@ import com.google.android.gms.wearable.DataItem;
 import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.WearableListenerService;
-import com.vincent.wearabledemo.activity.WearActivity;
 
 public class DataSyncService extends WearableListenerService {
 
@@ -54,7 +53,7 @@ public class DataSyncService extends WearableListenerService {
         testData.putString(DATA_KEY, String.valueOf(count));
         intent.putExtras(testData);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        this.startActivity(intent);
+        startActivity(intent);
 
 
         Log.i("Update Count", "" + count);

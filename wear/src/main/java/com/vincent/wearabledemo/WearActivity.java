@@ -1,4 +1,4 @@
-package com.vincent.wearabledemo.activity;
+package com.vincent.wearabledemo;
 
 import android.app.Activity;
 import android.app.Notification;
@@ -20,7 +20,6 @@ import com.google.android.gms.wearable.DataItem;
 import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.Wearable;
-import com.vincent.wearabledemo.R;
 
 public class WearActivity extends Activity implements
         DataApi.DataListener,
@@ -61,7 +60,8 @@ public class WearActivity extends Activity implements
         //Intent intent = new Intent(this, AmbientActivity.class);
         //Intent intent = new Intent(this, CardActivity.class);
         //Intent intent = new Intent(this, ListActivity.class);
-        Intent intent = new Intent(this, PickerActivity.class);
+        //Intent intent = new Intent(this, PickerActivity.class);
+        Intent intent = new Intent(this, PathPromptActivity.class);
 
         startActivity(intent);
 

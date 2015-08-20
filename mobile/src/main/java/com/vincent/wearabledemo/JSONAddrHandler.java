@@ -1,11 +1,11 @@
-package com.vincent.wearabledemo.handler;
+package com.vincent.wearabledemo;
 
 
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import com.vincent.wearabledemo.activity.MapActivity;
+import com.vincent.wearabledemo.MapActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;

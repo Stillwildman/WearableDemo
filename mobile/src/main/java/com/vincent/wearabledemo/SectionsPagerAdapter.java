@@ -1,14 +1,10 @@
-package com.vincent.wearabledemo.adapter;
+package com.vincent.wearabledemo;
 
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-
-import com.vincent.wearabledemo.R;
-import com.vincent.wearabledemo.fragment.AdvancedFeature;
-import com.vincent.wearabledemo.fragment.BasicNotificationFragment;
 
 public class SectionsPagerAdapter extends FragmentPagerAdapter
 {
