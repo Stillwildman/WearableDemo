@@ -16,6 +16,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -50,13 +51,16 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class MapActivity extends com.google.android.maps.MapActivity implements LocationListener {
 
@@ -195,25 +199,27 @@ public class MapActivity extends com.google.android.maps.MapActivity implements 
 
             try {
                 addrs = geocoder.getFromLocationName(input, 1);
-                Log.i("findLocation", addrs.toString());
+                Log.i("Find Location", addrs.toString());
             }
             catch (IOException e) {
                 toastShort("Geocoder：" + e.getMessage());
-                Log.e("findLocationError:", e.toString());
+                Log.e("Find Location Error:", e.toString());
             }
             if (addrs == null || addrs.isEmpty())
             {
-                Log.e("addrsIsEmpty!", "" + addrs.size());
+                Log.e("addrs Is Empty!", ".....Nothing here");
                 typingText.setText("");
 
                 new Thread()
                 {
                     public void run()
                     {
-                        String JSONString = getAddressByGoogleApi(input);
+                        final String JSONString = getAddressByGoogleApi(input);
 
+                        Looper.prepare();
                         JSONAddrHandler jsonAddrHandler = new JSONAddrHandler(MapActivity.this);
                         jsonAddrHandler.obtainMessage(0, JSONString).sendToTarget();
+                        Looper.loop();
                     }
                 }.start();
             } else
@@ -228,8 +234,8 @@ public class MapActivity extends com.google.android.maps.MapActivity implements 
                         + " (" + addr.getCountryName()
                         + ")";
 
-                Log.i("LocationFound", locationName);
-                Log.i("LocationFound", addr.getLatitude() + "," + addr.getLongitude());
+                Log.i("Location Found", locationName);
+                Log.i("Location Found", addr.getLatitude() + "," + addr.getLongitude());
 
                 putSearchMarker(geoLat, geoLng, locationName);
 
@@ -479,8 +485,7 @@ public class MapActivity extends com.google.android.maps.MapActivity implements 
                     }
                 }
             }
-            catch(Exception e)
-            {
+            catch(Exception e) {
                 Log.e("mapUrlFailed", e.toString());
             }
             return null;
@@ -496,12 +501,98 @@ public class MapActivity extends com.google.android.maps.MapActivity implements 
                 drawOverlay = new DrawOverlay(myPoints);
                 mapView.getOverlays().add(drawOverlay);
                 mapView.invalidate();
-                //directions(routeResult);
+                getDirectionInfo(routeResult);
                 loadingBarStop();
             } else {
                 loadingBarStop();
                 toastLong("Oops~Routed failed!!\nUnable to draw the path, it may caused by the sea crossing path.");
             }
+        }
+    }
+
+    public void getDirectionInfo(String routeInJSON)
+    {
+        List<Map<String, String>> dirList = new ArrayList<>();
+        List<String> infoList = new ArrayList<>();
+        try
+        {
+            JSONObject jb = new JSONObject(routeInJSON);
+            JSONArray routesArr = jb.getJSONArray("routes");
+            JSONObject route = routesArr.getJSONObject(0);
+            JSONArray legsArr = route.getJSONArray("legs");
+            JSONObject leg = legsArr.getJSONObject(0);
+            JSONArray stepsArr = leg.getJSONArray("steps");
+
+            for (int i = 0; i < stepsArr.length(); i++)
+            {
+                JSONObject singleStep = stepsArr.getJSONObject(i);
+                JSONObject distance = singleStep.getJSONObject("distance");
+                JSONObject duration = singleStep.getJSONObject("duration");
+                JSONObject startLocation = singleStep.getJSONObject("start_location");
+
+                String path = singleStep.getString("html_instructions").replace("<b>", "");
+
+                Map<String, String> listItem = new HashMap<>();
+
+                path = path.replace("</b>", "");
+                path = (i+1) + "-" + path;
+                if (path.contains("<div"))
+                {
+                    String pathGoOn = path.substring(path.indexOf(">")+1, path.lastIndexOf("<"));
+                    if (pathGoOn.contains("div"))
+                    {
+                        StringBuilder clearGoOn = new StringBuilder(pathGoOn);
+                        clearGoOn.delete(pathGoOn.indexOf("<"), pathGoOn.lastIndexOf(">"));
+                        pathGoOn = clearGoOn.toString().replace(">", "-->");
+                    }
+                    Log.i("pathGoOn", pathGoOn);
+
+                    listItem.put("pathGoOn", pathGoOn);
+
+                    StringBuilder pathClear = new StringBuilder(path);
+                    pathClear.delete(path.indexOf("<"), path.lastIndexOf(">")+1);
+                    path = pathClear.toString();
+                }
+
+                Log.i("Path", path);
+
+                String disValue = distance.getString("text");
+                double dis = Double.parseDouble(disValue.substring(0, disValue.indexOf(" ")));
+                if (dis < 1)
+                    disValue = distance.getString("value") + " 公尺";
+                listItem.put("disText", disValue);
+                listItem.put("durText", duration.getString("text"));
+                listItem.put("startLat", startLocation.getString("lat"));
+                listItem.put("startLng", startLocation.getString("lng"));
+
+                listItem.put("path", path);
+
+                dirList.add(listItem);
+            }
+            JSONObject Dis = leg.getJSONObject("distance");
+            JSONObject Dur = leg.getJSONObject("duration");
+            String Destination = leg.getString("end_address");
+            String Duration = Dur.getString("text");
+            String Distance = Dis.getString("text");
+            String Summary = route.getString("summary");
+
+            double dis = Double.parseDouble(Distance.substring(0, Distance.indexOf(" ")));
+            if (dis < 1)
+                Distance = Dis.getString("value") + " 公尺";
+
+            infoList.add(Destination);	//0
+            infoList.add(Duration);		//1
+            infoList.add(Distance);		//2
+            infoList.add(Summary);		//3
+
+            //directionList = dirList;
+            //pathInfoList = infoList;
+
+            //directionPop();
+        }
+        catch (JSONException e)
+        {
+            Log.e("DirectionFailed", e.getMessage());
         }
     }
 
@@ -571,7 +662,6 @@ public class MapActivity extends com.google.android.maps.MapActivity implements 
             myLayer.disableCompass();
             Log.i("onState", "Pause");
         }
-
     }
 
     @Override
@@ -610,7 +700,6 @@ public class MapActivity extends com.google.android.maps.MapActivity implements 
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-
     }
 
     @Override

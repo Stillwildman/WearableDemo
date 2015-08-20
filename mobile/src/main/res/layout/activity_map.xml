@@ -16,6 +16,15 @@
         android:layout_weight="0"
         android:animateLayoutChanges="true">
 
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/debugText"
+            android:textSize="18sp"
+            android:layout_weight="1"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp" />
+
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -29,7 +38,8 @@
             android:id="@+id/locateButton"
             android:src="@android:drawable/ic_menu_mylocation"
             android:scaleType="centerCrop"
-            android:onClick="locateClick" />
+            android:onClick="locateClick"
+            android:background="@drawable/press_style02" />
     </LinearLayout>
 
     <View
@@ -77,6 +87,17 @@
         android:gravity="center_vertical">
 
 
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/pathButton"
+            android:src="@android:drawable/ic_menu_directions"
+            android:layout_weight="0"
+            android:background="@drawable/press_style01"
+            android:scaleType="centerCrop"
+            android:onClick="pathClick"
+            android:visibility="gone" />
+
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -90,6 +111,7 @@
             android:layout_weight="0"
             android:src="@android:drawable/ic_menu_search"
             android:scaleType="centerCrop"
-            android:onClick="searchClick" />
+            android:onClick="searchClick"
+            android:background="@drawable/press_style01" />
     </LinearLayout>
 </LinearLayout>

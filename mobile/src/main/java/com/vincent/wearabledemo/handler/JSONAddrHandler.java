@@ -1,5 +1,6 @@
 package com.vincent.wearabledemo.handler;
 
+
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -25,44 +26,43 @@ public class JSONAddrHandler extends Handler
     {
         MapActivity mapActivity = weakActivity.get();
 
-        if (mapActivity != null)
+        switch (url.what)
         {
-            switch (url.what)
-            {
-                case 0:
+            case 0:
 
-                    String JASONString = null;
+                String JASONString = null;
 
-                    if (url.obj instanceof String)
-                        JASONString = (String) url.obj;
-                    try
-                    {
-                        JSONObject jb = new JSONObject(JASONString);
-                        String status = jb.getString("status");
-                        Log.i("LocationStatus", status);
+                if (url.obj instanceof String)
+                    JASONString = (String) url.obj;
+                try
+                {
+                    JSONObject jb = new JSONObject(JASONString);
+                    String status = jb.getString("status");
+                    Log.i("LocationStatus", status);
 
-                        JSONArray ja = jb.getJSONArray("results");
-                        JSONObject result = ja.getJSONObject(0);
-                        JSONObject location = result.getJSONObject("geometry").getJSONObject("location");
+                    JSONArray ja = jb.getJSONArray("results");
+                    JSONObject result = ja.getJSONObject(0);
+                    JSONObject location = result.getJSONObject("geometry").getJSONObject("location");
 
-                        String addressName = result.getString("formatted_address");
-                        Log.i("LocationFound", addressName);
+                    String addressName = result.getString("formatted_address");
+                    Log.i("LocationFound", addressName);
 
-                        String lat = location.getString("lat");
-                        String lng = location.getString("lng");
+                    String lat = location.getString("lat");
+                    String lng = location.getString("lng");
 
-                        double locLat = Double.parseDouble(lat) * 1E6;
-                        double locLng = Double.parseDouble(lng) * 1E6;
+                    double locLat = Double.parseDouble(lat) * 1E6;
+                    double locLng = Double.parseDouble(lng) * 1E6;
 
-                        mapActivity.putSearchMarker(locLat, locLng, addressName);
+                    mapActivity.putSearchMarker(locLat, locLng, addressName);
 
-                        Log.i("LocationFound", lat+","+lng);
-                    }
-                    catch (JSONException e) {
-                        mapActivity.toastShort("Location not find!");
-                        Log.e("LocationError", e.getMessage());
-                    }
-            }
+                    Log.i("LocationFound", lat + "," + lng);
+                }
+                catch (JSONException e) {
+                    mapActivity.toastLong("Location Not Found!");
+                    Log.e("LocationError", e.getMessage());
+                }
+
+                getLooper().quit();
         }
     }
 }
