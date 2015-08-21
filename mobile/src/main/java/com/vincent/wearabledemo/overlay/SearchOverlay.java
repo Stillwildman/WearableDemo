@@ -94,7 +94,7 @@ public class SearchOverlay extends ItemizedOverlay<OverlayItem> {
 							double lng =Double.parseDouble(point[1]) / 1E6;
 
 							((MapActivity) context).routeFromSearchPoint(""+lat, ""+lng);
-							Log.i("GeoPoint", "Lat = " + lat + " , " + "Lng = " + lng);
+							Log.i("GeoPointOnMap", "Lat = " + lat + " , " + "Lng = " + lng);
 						}
 					});
 

@@ -2,9 +2,11 @@ package com.vincent.wearabledemo.activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.support.wearable.activity.ConfirmationActivity;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.WindowManager;
@@ -37,11 +39,12 @@ public class PathPromptActivity extends Activity implements
 
     private static final String DATA_TEXT_KEY = "path_text";
     private static final String DATA_IMG_KEY = "path_image";
-    private static final String DATA_PATH = "/demo";
+    private static final String DATA_MAP_PATH = "/mapDemo";
 
     private static final int PATH_GO_STRAIGHT = 0;
     private static final int PATH_TURN_RIGHT = 1;
     private static final int PATH_TURN_LEFT = 2;
+    private static final int NOTIFY_ARRIVED = 9;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,9 @@ public class PathPromptActivity extends Activity implements
 
         promptText = (TextView) findViewById(R.id.path_prompt_text);
         promptImage = (ImageView) findViewById(R.id.path_prompt_image);
+
+        promptText.setText("Direction Mode");
+        promptImage.setImageResource(android.R.drawable.ic_dialog_map);
 
         gac = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -99,13 +105,16 @@ public class PathPromptActivity extends Activity implements
             {
                 DataItem items = event.getDataItem();
 
-                if (items.getUri().getPath().compareTo(DATA_PATH) == 0)
+                if (items.getUri().getPath().compareTo(DATA_MAP_PATH) == 0)
                 {
                     DataMap dataMap = DataMapItem.fromDataItem(items).getDataMap();
                     updateText(dataMap.getString(DATA_TEXT_KEY));
                     updateImage(dataMap.getInt(DATA_IMG_KEY));
 
                     vibrate();
+
+                    if (dataMap.getInt(DATA_IMG_KEY) == 9)
+
 
                     Log.d("PromptUpdate!!!", dataMap.getString(DATA_TEXT_KEY) + " "
                             + dataMap.getInt(DATA_IMG_KEY));
@@ -137,15 +146,35 @@ public class PathPromptActivity extends Activity implements
                     case PATH_GO_STRAIGHT:
                         promptImage.setImageResource(R.mipmap.arrow_straight);
                         break;
+
                     case PATH_TURN_RIGHT:
                         promptImage.setImageResource(R.mipmap.arrow_turn_right);
                         break;
+
                     case PATH_TURN_LEFT:
                         promptImage.setImageResource(R.mipmap.arrow_turn_left);
+                        break;
+
+                    case NOTIFY_ARRIVED:
+                        notifyArrived();
                         break;
                 }
             }
         });
+    }
+
+    private void notifyArrived()
+    {
+        Intent intent = new Intent(this, ConfirmationActivity.class);
+
+        intent.putExtra(ConfirmationActivity.EXTRA_ANIMATION_TYPE,
+                ConfirmationActivity.SUCCESS_ANIMATION);
+        intent.putExtra(ConfirmationActivity.EXTRA_MESSAGE, "抵達目的地！");
+
+        startActivity(intent);
+
+        promptText.setText("Direction Mode");
+        promptImage.setImageResource(android.R.drawable.ic_dialog_map);
     }
 
     private void vibrate()

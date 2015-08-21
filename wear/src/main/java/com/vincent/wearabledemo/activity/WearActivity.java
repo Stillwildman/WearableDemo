@@ -31,6 +31,7 @@ public class WearActivity extends Activity implements
 
     private static final String DATA_KEY = "Brack";
     private static final String DATA_PATH = "/demo";
+    private static final String DATA_COUNT_PATH = "/count";
 
     private GoogleApiClient gac;
 
@@ -114,7 +115,7 @@ public class WearActivity extends Activity implements
                 //DataItem Changed
                 DataItem items = event.getDataItem();
 
-                if (items.getUri().getPath().compareTo(DATA_PATH) == 0)
+                if (items.getUri().getPath().compareTo(DATA_COUNT_PATH) == 0)
                 {
                     DataMap dataMap = DataMapItem.fromDataItem(items).getDataMap();
                     textUpdate(dataMap.getInt(DATA_KEY));

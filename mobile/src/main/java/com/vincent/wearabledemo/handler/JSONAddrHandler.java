@@ -55,7 +55,8 @@ public class JSONAddrHandler extends Handler
 
                     mapActivity.putSearchMarker(locLat, locLng, addressName);
 
-                    Log.i("LocationFound", lat + "," + lng);
+                    Log.i("LocationFound", lat + "," + lng + "\n"
+                            + "***** " + locLat + "," + locLng + " *****");
                 }
                 catch (JSONException e) {
                     mapActivity.toastLong("Location Not Found!");

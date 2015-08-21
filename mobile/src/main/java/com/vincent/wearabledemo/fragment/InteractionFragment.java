@@ -25,6 +25,9 @@ public class InteractionFragment extends Fragment implements
 
     private static final String DATA_KEY = "Brack";
     private static final String DATA_PATH = "/demo";
+    private static final String DATA_COUNT_PATH = "/count";
+    private static final String DATA_REFRESH_KEY = "REFRESHING";
+    private static int DATA_REFRESH_COUNT = 0;
 
     private GoogleApiClient gac;
     private int count = 0;
@@ -47,10 +50,12 @@ public class InteractionFragment extends Fragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.fragment_advanced_feature, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_interaction, container, false);
 
         Button syncBtn = (Button) rootView.findViewById(R.id.syncButton);
         Button mapBtn = (Button) rootView.findViewById(R.id.mapButton);
+        Button listBtn = (Button) rootView.findViewById(R.id.wearableListButton);
+        Button pickerBtn = (Button) rootView.findViewById(R.id.pickerButton);
 
         gac = new GoogleApiClient.Builder(getActivity())
                 .addConnectionCallbacks(this)
@@ -70,8 +75,22 @@ public class InteractionFragment extends Fragment implements
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), MapActivity.class);
                 startActivity(intent);
-                //openDirection();
-                increaseCounter();
+                openFunction("map");
+                //increaseCounter();
+            }
+        });
+
+        listBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFunction("list");
+            }
+        });
+
+        pickerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFunction("picker");
             }
         });
 
@@ -83,7 +102,7 @@ public class InteractionFragment extends Fragment implements
     {
         if (gac.isConnected())
         {
-            PutDataMapRequest putDataMapReq = PutDataMapRequest.create(DATA_PATH);
+            PutDataMapRequest putDataMapReq = PutDataMapRequest.create(DATA_COUNT_PATH);
 
             putDataMapReq.getDataMap().putInt(DATA_KEY, count++);
 
@@ -94,18 +113,19 @@ public class InteractionFragment extends Fragment implements
         }
     }
 
-    private void openDirection()
+    private void openFunction(String key)
     {
         if (gac.isConnected())
         {
             PutDataMapRequest putDataMapReq = PutDataMapRequest.create(DATA_PATH);
 
-            putDataMapReq.getDataMap().putInt(DATA_KEY, count++);
+            putDataMapReq.getDataMap().putInt(DATA_REFRESH_KEY, DATA_REFRESH_COUNT++);
+            putDataMapReq.getDataMap().putString(DATA_KEY, key);
 
             PutDataRequest putDataReq = putDataMapReq.asPutDataRequest();
             Wearable.DataApi.putDataItem(gac, putDataReq);
 
-            Log.i("DataItemPut!", "" + count);
+            Log.d("REFRESH COUNT", "" + DATA_REFRESH_COUNT);
         }
     }
 

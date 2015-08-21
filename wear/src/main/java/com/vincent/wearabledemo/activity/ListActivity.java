@@ -1,12 +1,13 @@
 package com.vincent.wearabledemo.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.wearable.view.WearableListView;
 import android.util.Log;
 
-import com.vincent.wearabledemo.adapter.ListAdapter;
 import com.vincent.wearabledemo.R;
+import com.vincent.wearabledemo.adapter.ListAdapter;
 
 public class ListActivity extends Activity implements WearableListView.ClickListener {
 
@@ -28,6 +29,10 @@ public class ListActivity extends Activity implements WearableListView.ClickList
     public void onClick(WearableListView.ViewHolder viewHolder)
     {
         Integer tag = (Integer) viewHolder.itemView.getTag();
+
+        Intent intent = new Intent(this, ConfirmActivity.class);
+        startActivity(intent);
+
         Log.i("Do Something~", "" + tag);
     }
 

@@ -16,7 +16,22 @@
         android:text="Syncing Data Items"
         android:id="@+id/syncButton"
         android:layout_gravity="center_horizontal"
-        android:textAppearance="@android:style/TextAppearance.Holo.Large" />
+        android:textAppearance="@android:style/TextAppearance.Holo.Large"
+        android:layout_marginBottom="20dp" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Wearable List"
+        android:id="@+id/wearableListButton"
+        android:textAppearance="@android:style/TextAppearance.Holo.Large"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="2D Picker"
+        android:id="@+id/pickerButton"
+        android:textAppearance="@android:style/TextAppearance.Holo.Large"/>
 
     <Button
         android:layout_width="match_parent"

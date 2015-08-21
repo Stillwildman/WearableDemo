@@ -59,7 +59,7 @@ public class NotificationFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.fragment_basic_notification, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_notification, container, false);
 
         textInput = (EditText) rootView.findViewById(R.id.textInput);
         ListView itemList = (ListView) rootView.findViewById(R.id.demoList);

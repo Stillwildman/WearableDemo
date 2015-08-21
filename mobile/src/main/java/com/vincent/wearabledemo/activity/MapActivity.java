@@ -21,6 +21,7 @@ import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -40,12 +41,12 @@ import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
-import com.vincent.wearabledemo.overlay.DrawOverlay;
+import com.vincent.wearabledemo.R;
 import com.vincent.wearabledemo.handler.JSONAddrHandler;
+import com.vincent.wearabledemo.overlay.DrawOverlay;
+import com.vincent.wearabledemo.overlay.SearchOverlay;
 import com.vincent.wearabledemo.utils.Poi;
 import com.vincent.wearabledemo.utils.PolyHelper;
-import com.vincent.wearabledemo.R;
-import com.vincent.wearabledemo.overlay.SearchOverlay;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -87,6 +88,7 @@ public class MapActivity extends com.google.android.maps.MapActivity implements
 
     private boolean enableTool;
     private boolean requestGPS;
+    private boolean mapTrackMove;
     private boolean countable;
 
     private int screenWidth;
@@ -106,12 +108,12 @@ public class MapActivity extends com.google.android.maps.MapActivity implements
 
     private static final String DATA_TEXT_KEY = "path_text";
     private static final String DATA_IMG_KEY = "path_image";
-    private static final String DATA_PATH = "/demo";
-    private static final String DATA_SERVICE = "/service";
+    private static final String DATA_MAP_PATH = "/mapDemo";
 
     private static final int PATH_GO_STRAIGHT = 0;
     private static final int PATH_TURN_RIGHT = 1;
     private static final int PATH_TURN_LEFT = 2;
+    private static final int NOTIFY_ARRIVED = 9;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -194,6 +196,7 @@ public class MapActivity extends com.google.android.maps.MapActivity implements
         });
         locOverlays.add(myLayer);
 
+        mapTrackMove = true;
         mapView.invalidate();
     }
 
@@ -272,7 +275,11 @@ public class MapActivity extends com.google.android.maps.MapActivity implements
                         + ")";
 
                 Log.i("Location Found", locationName);
-                Log.i("Location Found", addr.getLatitude() + "," + addr.getLongitude());
+                Log.i("Location Found", addr.getLatitude() + "," + addr.getLongitude()
+                        + " ***** "
+                        + (addr.getLatitude()*1E6) + ","
+                        + (addr.getLongitude()*1E6)
+                        + " *****");
 
                 putSearchMarker(geoLat, geoLng, locationName);
 
@@ -455,7 +462,8 @@ public class MapActivity extends com.google.android.maps.MapActivity implements
         else {
             double lat = myLocation.getLatitude();
             double lng = myLocation.getLongitude();
-            Log.i("MyPosition", ""+lat +" , "+ lng);
+            Log.i("MyPosition", lat +" , "+ lng
+                    + " ***** " + (lat*1E6) + "," + (lng*1E6) + " *****");
 
             mapMove((int)(lat * 1E6),
                     (int)(lng * 1E6));
@@ -603,6 +611,17 @@ public class MapActivity extends com.google.android.maps.MapActivity implements
                 listItem.put("durText", duration.getString("text"));
                 listItem.put("startLat", startLocation.getString("lat"));
                 listItem.put("startLng", startLocation.getString("lng"));
+
+                if (i == stepsArr.length() -1)
+                {
+                    JSONObject endLocation = singleStep.getJSONObject("end_location");
+                    String endLat = endLocation.getString("lat");
+                    String endLng = endLocation.getString("lng");
+                    listItem.put("endLat", endLat);
+                    listItem.put("endLng", endLng);
+
+                    Log.d("FinalPoint", path);
+                }
 
                 listItem.put("path", path);
 
@@ -779,7 +798,7 @@ public class MapActivity extends com.google.android.maps.MapActivity implements
     {
         if (gac.isConnected())
         {
-            PutDataMapRequest putDataMapReq = PutDataMapRequest.create(DATA_PATH);
+            PutDataMapRequest putDataMapReq = PutDataMapRequest.create(DATA_MAP_PATH);
 
             putDataMapReq.getDataMap().putString(DATA_TEXT_KEY, pathText);
             putDataMapReq.getDataMap().putInt(DATA_IMG_KEY, pathImg);
@@ -788,6 +807,21 @@ public class MapActivity extends com.google.android.maps.MapActivity implements
             Wearable.DataApi.putDataItem(gac, putDataReq);
 
             Log.i("DataItemPut!", pathText + " - " + pathImg);
+        }
+    }
+
+    private void sendNotifyArrived()
+    {
+        if (gac.isConnected())
+        {
+            PutDataMapRequest putDataMapReq = PutDataMapRequest.create(DATA_MAP_PATH);
+
+            putDataMapReq.getDataMap().putInt(DATA_IMG_KEY, NOTIFY_ARRIVED);
+
+            PutDataRequest putDataReq = putDataMapReq.asPutDataRequest();
+            Wearable.DataApi.putDataItem(gac, putDataReq);
+
+            Log.i("Notify Arrived!!", "YOOOOOO~~~~");
         }
     }
 
@@ -860,21 +894,32 @@ public class MapActivity extends com.google.android.maps.MapActivity implements
             }
             distanceSort(pois);
             setNearestView();
+
+            double myLat = myLocation.getLatitude();
+            double myLng = myLocation.getLongitude();
+            double finalLat = Double.valueOf(directionList.get(directionList.size()-1).get("endLat"));
+            double finalLng = Double.valueOf(directionList.get(directionList.size()-1).get("endLng"));
+
+            if (distance(myLat, myLng, finalLat, finalLng) < 10) {
+                sendNotifyArrived();
+                countable = false;
+                mapView.getOverlays().remove(drawOverlay);
+                pois.clear();
+                directionList.clear();
+            }
         }
-        /*
-        if (mapFocusMove)
+        if (mapTrackMove)
         {
             GP = new GeoPoint((int)(location.getLatitude()*1E6), (int)(location.getLongitude()*1E6));
             mapControl.animateTo(GP);
 
-            mapView.setOnTouchListener(new OnTouchListener() {
+            mapView.setOnTouchListener(new View.OnTouchListener() {
                 public boolean onTouch(View v, MotionEvent event) {
-                    mapFocusMove = false;
+                    mapTrackMove = false;
                     return false;
                 }
             });
         }
-        */
     }
 
     @Override

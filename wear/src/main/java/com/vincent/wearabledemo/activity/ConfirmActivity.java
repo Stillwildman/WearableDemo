@@ -27,19 +27,25 @@ public class ConfirmActivity extends Activity implements DelayedConfirmationView
 
     @Override
     public void onTimerFinished(View view) {
+        callConfirmation(1);
         delayedView.reset();
+        this.finish();
     }
 
     @Override
     public void onTimerSelected(View view) {
-        callConfirmation();
+        callConfirmation(2);
+        delayedView.reset();
     }
 
-    private void callConfirmation()
+    private void callConfirmation(int key)
     {
         Intent intent = new Intent(this, ConfirmationActivity.class);
-        intent.putExtra(ConfirmationActivity.EXTRA_ANIMATION_TYPE,
-                ConfirmationActivity.SUCCESS_ANIMATION);
+
+        // 1 = ConfirmationActivity.SUCCESS_ANIMATION
+        // 2 = ConfirmationActivity.OPEN_ON_PHONE_ANIMATIO
+
+        intent.putExtra(ConfirmationActivity.EXTRA_ANIMATION_TYPE, key);
         intent.putExtra(ConfirmationActivity.EXTRA_MESSAGE,
                 getString(R.string.confirmationMessage));
 
