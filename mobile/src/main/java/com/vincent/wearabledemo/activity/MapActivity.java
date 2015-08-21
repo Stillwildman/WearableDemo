@@ -1,4 +1,4 @@
-package com.vincent.wearabledemo;
+package com.vincent.wearabledemo.activity;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -40,6 +40,12 @@ import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
+import com.vincent.wearabledemo.overlay.DrawOverlay;
+import com.vincent.wearabledemo.handler.JSONAddrHandler;
+import com.vincent.wearabledemo.utils.Poi;
+import com.vincent.wearabledemo.utils.PolyHelper;
+import com.vincent.wearabledemo.R;
+import com.vincent.wearabledemo.overlay.SearchOverlay;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -101,6 +107,7 @@ public class MapActivity extends com.google.android.maps.MapActivity implements
     private static final String DATA_TEXT_KEY = "path_text";
     private static final String DATA_IMG_KEY = "path_image";
     private static final String DATA_PATH = "/demo";
+    private static final String DATA_SERVICE = "/service";
 
     private static final int PATH_GO_STRAIGHT = 0;
     private static final int PATH_TURN_RIGHT = 1;
@@ -272,7 +279,7 @@ public class MapActivity extends com.google.android.maps.MapActivity implements
                 typingText.setText("");
             }
         } else {
-            toastShort("Your Input is Empty!!");
+            toastShort("The Input was Empty!!");
         }
         imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
     }
@@ -332,8 +339,8 @@ public class MapActivity extends com.google.android.maps.MapActivity implements
             }
             else
             {
-                markerWidth = 70;
-                markerHeight = 75;
+                markerWidth = 80;
+                markerHeight = 85;
             }
         }
         else {
@@ -343,8 +350,8 @@ public class MapActivity extends com.google.android.maps.MapActivity implements
                 markerHeight = 60;
             } else
             {
-                markerWidth = 70;
-                markerHeight = 75;
+                markerWidth = 80;
+                markerHeight = 85;
             }
         }
 
@@ -531,6 +538,7 @@ public class MapActivity extends com.google.android.maps.MapActivity implements
                 drawOverlay = new DrawOverlay(myPoints);
                 mapView.getOverlays().add(drawOverlay);
                 mapView.invalidate();
+                //openDirectionOnWear();
                 getDirectionInfo(routeResult);
                 loadingBarStop();
             } else {
@@ -623,7 +631,6 @@ public class MapActivity extends com.google.android.maps.MapActivity implements
             infoList.add(Summary);		//3
 
             //pathInfoList = infoList;
-
             //directionPop();
         }
         catch (JSONException e)
@@ -657,14 +664,30 @@ public class MapActivity extends com.google.android.maps.MapActivity implements
         }
         distanceSort(pois);
         setNearestView();
-
+        /*
         Log.d("Location - Me & POI", myLocation.getLatitude()
                 + ","
                 + myLocation.getLongitude()
                 + "\n"
                 + pois.get(0).LAT + "," + pois.get(0).LNG);
+        */
     }
+/*
+    private void openDirectionOnWear()
+    {
+        if (gac.isConnected())
+        {
+            PutDataMapRequest putDataMapReq = PutDataMapRequest.create(DATA_SERVICE);
 
+            putDataMapReq.getDataMap().putString(DATA_TEXT_KEY, "Direction Mode");
+
+            PutDataRequest putDataReq = putDataMapReq.asPutDataRequest();
+            Wearable.DataApi.putDataItem(gac, putDataReq);
+
+            Log.d("OpenDirection", DATA_SERVICE);
+        }
+    }
+*/
     public void mapMove(int lat, int lng)
     {
         GP = new GeoPoint(lat, lng);

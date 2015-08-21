@@ -1,4 +1,4 @@
-package com.vincent.wearabledemo;
+package com.vincent.wearabledemo.fragment;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -23,10 +23,12 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class BasicNotificationFragment extends Fragment {
+import com.vincent.wearabledemo.R;
+
+public class NotificationFragment extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
-    public static BasicNotificationFragment instance;
+    public static NotificationFragment instance;
 
     private int notificationId = 001;
 
@@ -38,9 +40,9 @@ public class BasicNotificationFragment extends Fragment {
 
     private EditText groupIdInput;
 
-    public static BasicNotificationFragment newInstance(int sectionNumber)
+    public static NotificationFragment newInstance(int sectionNumber)
     {
-        BasicNotificationFragment fragmentInstance = new BasicNotificationFragment();
+        NotificationFragment fragmentInstance = new NotificationFragment();
 
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
@@ -50,7 +52,7 @@ public class BasicNotificationFragment extends Fragment {
         return fragmentInstance;
     }
 
-    public BasicNotificationFragment() {
+    public NotificationFragment() {
         // Required empty public constructor
     }
 

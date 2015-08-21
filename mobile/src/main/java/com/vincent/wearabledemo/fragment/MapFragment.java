@@ -1,10 +1,12 @@
-package com.vincent.wearabledemo;
+package com.vincent.wearabledemo.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.vincent.wearabledemo.R;
 
 public class MapFragment extends Fragment {
 

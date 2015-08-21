@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/listContainer"
-    tools:context="com.vincent.wearabledemo.ListActivity"
+    tools:context="com.vincent.wearabledemo.activity.ListActivity"
     tools:deviceIds="wear"
     android:padding="10dp"
     android:background="@android:drawable/alert_light_frame">

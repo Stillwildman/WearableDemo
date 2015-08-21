@@ -1,4 +1,4 @@
-package com.vincent.wearabledemo;
+package com.vincent.wearabledemo.utils;
 
 import java.text.DecimalFormat;
 

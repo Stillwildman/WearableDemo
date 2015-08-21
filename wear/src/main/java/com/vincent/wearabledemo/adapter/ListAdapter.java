@@ -1,4 +1,4 @@
-package com.vincent.wearabledemo;
+package com.vincent.wearabledemo.adapter;
 
 import android.content.Context;
 import android.support.wearable.view.WearableListView;

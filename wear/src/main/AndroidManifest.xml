@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.vincent.wearabledemo">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.vincent.wearabledemo" >
 
     <uses-feature android:name="android.hardware.type.watch" />
 
@@ -10,9 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="com.vincent.wearabledemo.permission.MAPS_RECEIVE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -22,16 +19,16 @@
         <uses-library
             android:name="com.google.android.wearable"
             android:required="false" />
-        <!--
+
         <service
             android:name= ".service.DataSyncService" >
             <intent-filter>
                 <action android:name= "com.google.android.gms.wearable.BIND_LISTENER"  />
             </intent-filter>
         </service>
-        -->
+
         <activity
-            android:name=".WearActivity"
+            android:name=".activity.WearActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,7 +37,7 @@
         </activity>
 
         <activity
-            android:name=".AmbientActivity"
+            android:name=".activity.AmbientActivity"
             android:allowEmbedded="true"
             android:exported="true"
             android:label="@string/title_ambient_activity"
@@ -48,23 +45,47 @@
         </activity>
 
         <activity
-            android:name=".CardActivity"
-            android:label="@string/title_card_activity" >
+            android:name=".activity.CardActivity"
+            android:allowEmbedded="true"
+            android:exported="true"
+            android:label="@string/title_card_activity"
+            android:taskAffinity="" >
         </activity>
 
         <activity
-            android:name=".ListActivity"
-            android:label="@string/title_list_activity" >
+            android:name=".activity.ListActivity"
+            android:allowEmbedded="true"
+            android:exported="true"
+            android:label="@string/title_list_activity"
+            android:taskAffinity="" >
         </activity>
 
         <activity
-            android:name=".PickerActivity"
-            android:label="@string/title_picker_activity" >
+            android:name=".activity.PickerActivity"
+            android:allowEmbedded="true"
+            android:exported="true"
+            android:label="@string/title_picker_activity"
+            android:taskAffinity="" >
         </activity>
 
         <activity
-            android:name=".PathPromptActivity"
-            android:label="@string/title_path_prompt_activity" >
+            android:name=".activity.PathPromptActivity"
+            android:label="@string/title_path_prompt_activity"
+            android:allowEmbedded="true"
+            android:exported="true"
+            android:taskAffinity="" >
+        </activity>
+
+        <activity
+            android:name=".activity.ConfirmActivity"
+            android:label="@string/title_confirmation_activity"
+            android:allowEmbedded="true"
+            android:exported="true"
+            android:taskAffinity="" >
+        </activity>
+
+        <activity
+            android:name="android.support.wearable.activity.ConfirmationActivity">
         </activity>
 
     </application>

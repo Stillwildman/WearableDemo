@@ -1,9 +1,12 @@
-package com.vincent.wearabledemo;
+package com.vincent.wearabledemo.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.wearable.view.WearableListView;
 import android.util.Log;
+
+import com.vincent.wearabledemo.adapter.ListAdapter;
+import com.vincent.wearabledemo.R;
 
 public class ListActivity extends Activity implements WearableListView.ClickListener {
 

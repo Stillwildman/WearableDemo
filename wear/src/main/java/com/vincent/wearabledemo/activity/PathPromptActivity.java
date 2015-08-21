@@ -1,4 +1,4 @@
-package com.vincent.wearabledemo;
+package com.vincent.wearabledemo.activity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -21,6 +21,7 @@ import com.google.android.gms.wearable.DataItem;
 import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.Wearable;
+import com.vincent.wearabledemo.R;
 
 public class PathPromptActivity extends Activity implements 
         DataApi.DataListener,
@@ -71,7 +72,7 @@ public class PathPromptActivity extends Activity implements
 
     private void setTextLayout()
     {
-        int requestHeight = (int) (screenHeight * 0.28);
+        int requestHeight = (int) (screenHeight * 0.27);
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, getPixels(requestHeight));

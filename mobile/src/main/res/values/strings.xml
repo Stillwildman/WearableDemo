@@ -6,8 +6,8 @@
     <string name="BigTextStyle">BigTextStyle</string>
     <string name="InboxStyle">InboxStyle</string>
     <string name="GroupIdHint">Enter a Group ID</string>
-    <string name="Notify_Basic">Basic Notification</string>
-    <string name="Notify_Advanced">Advanced Feature</string>
+    <string name="Notify_Basic">Notification</string>
+    <string name="Notify_Advanced">Interaction</string>
     <string name="Notify_Map">Map View</string>
     <string name="title_activity_map">MapActivity</string>
 

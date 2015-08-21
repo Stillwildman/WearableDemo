@@ -1,4 +1,4 @@
-package com.vincent.wearabledemo;
+package com.vincent.wearabledemo.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,8 +14,10 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
+import com.vincent.wearabledemo.R;
+import com.vincent.wearabledemo.activity.MapActivity;
 
-public class AdvancedFeature extends Fragment implements
+public class InteractionFragment extends Fragment implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener
 {
@@ -27,9 +29,9 @@ public class AdvancedFeature extends Fragment implements
     private GoogleApiClient gac;
     private int count = 0;
 
-    public static AdvancedFeature newInstance(int sectionNumber)
+    public static InteractionFragment newInstance(int sectionNumber)
     {
-        AdvancedFeature fragmentInstance = new AdvancedFeature();
+        InteractionFragment fragmentInstance = new InteractionFragment();
 
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
@@ -38,7 +40,7 @@ public class AdvancedFeature extends Fragment implements
         return fragmentInstance;
     }
 
-    public AdvancedFeature() {
+    public InteractionFragment() {
         // Required empty public constructor
     }
 
@@ -68,6 +70,8 @@ public class AdvancedFeature extends Fragment implements
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), MapActivity.class);
                 startActivity(intent);
+                //openDirection();
+                increaseCounter();
             }
         });
 
@@ -76,6 +80,21 @@ public class AdvancedFeature extends Fragment implements
 
     // Create a data map and put data in it!
     private void increaseCounter()
+    {
+        if (gac.isConnected())
+        {
+            PutDataMapRequest putDataMapReq = PutDataMapRequest.create(DATA_PATH);
+
+            putDataMapReq.getDataMap().putInt(DATA_KEY, count++);
+
+            PutDataRequest putDataReq = putDataMapReq.asPutDataRequest();
+            Wearable.DataApi.putDataItem(gac, putDataReq);
+
+            Log.i("DataItemPut!", "" + count);
+        }
+    }
+
+    private void openDirection()
     {
         if (gac.isConnected())
         {

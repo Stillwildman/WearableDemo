@@ -1,4 +1,4 @@
-package com.vincent.wearabledemo;
+package com.vincent.wearabledemo.overlay;
 
 import android.graphics.Canvas;
 import android.graphics.Color;

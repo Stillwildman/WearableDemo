@@ -3,9 +3,15 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         BrackRelease {
-            keyAlias 'brack'
+            keyAlias 'Brack'
             keyPassword 'android'
-            storeFile file('C:/Users/vincent.chang/.android/release.keystore')
+            storeFile file('C:/Users/Brack/.android/release.keystore')
+            storePassword 'android'
+        }
+        MapDebug {
+            storeFile file('C:/Users/Brack/.android/debug.keystore')
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
             storePassword 'android'
         }
     }
@@ -17,12 +23,12 @@ android {
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
-        signingConfig signingConfigs.BrackRelease
+        signingConfig signingConfigs.MapDebug
     }
     buildTypes {
         release {
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.BrackRelease
         }
     }
     productFlavors {

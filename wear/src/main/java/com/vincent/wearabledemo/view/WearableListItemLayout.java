@@ -1,4 +1,4 @@
-package com.vincent.wearabledemo;
+package com.vincent.wearabledemo.view;
 
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;

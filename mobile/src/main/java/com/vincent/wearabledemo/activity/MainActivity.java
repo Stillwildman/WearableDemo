@@ -1,4 +1,4 @@
-package com.vincent.wearabledemo;
+package com.vincent.wearabledemo.activity;
 
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -13,6 +13,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.vincent.wearabledemo.fragment.NotificationFragment;
+import com.vincent.wearabledemo.R;
+import com.vincent.wearabledemo.adapter.SectionsPagerAdapter;
 
 import java.io.FileNotFoundException;
 
@@ -73,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
             try {
                 Bitmap image = BitmapFactory.decodeStream(CR.openInputStream(uri));
 
-                BasicNotificationFragment basic = BasicNotificationFragment.instance;
+                NotificationFragment basic = NotificationFragment.instance;
                 basic.notification_bigPicSand(image);
 
                 Log.i("ActivityResult", "" + image.getByteCount());

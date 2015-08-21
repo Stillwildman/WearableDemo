@@ -1,10 +1,14 @@
-package com.vincent.wearabledemo;
+package com.vincent.wearabledemo.adapter;
 
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+
+import com.vincent.wearabledemo.fragment.InteractionFragment;
+import com.vincent.wearabledemo.fragment.NotificationFragment;
+import com.vincent.wearabledemo.R;
 
 public class SectionsPagerAdapter extends FragmentPagerAdapter
 {
@@ -22,10 +26,10 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter
         switch (position)
         {
             case 0:
-                return BasicNotificationFragment.newInstance(position + 1);
+                return NotificationFragment.newInstance(position + 1);
 
             case 1:
-                return AdvancedFeature.newInstance(position + 1);
+                return InteractionFragment.newInstance(position + 1);
 
            /* case 2:
                 return MapFragment.newInstance(position + 1);*/

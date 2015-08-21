@@ -1,8 +1,11 @@
-package com.vincent.wearabledemo;
+package com.vincent.wearabledemo.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.wearable.view.GridViewPager;
+
+import com.vincent.wearabledemo.adapter.GridPagerAdapter;
+import com.vincent.wearabledemo.R;
 
 public class PickerActivity extends Activity {
 
