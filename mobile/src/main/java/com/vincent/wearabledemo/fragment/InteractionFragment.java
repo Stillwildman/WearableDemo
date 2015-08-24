@@ -11,11 +11,16 @@ import android.widget.Button;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.wearable.CapabilityApi;
+import com.google.android.gms.wearable.CapabilityInfo;
+import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 import com.vincent.wearabledemo.R;
 import com.vincent.wearabledemo.activity.MapActivity;
+
+import java.util.Set;
 
 public class InteractionFragment extends Fragment implements
         GoogleApiClient.ConnectionCallbacks,
@@ -32,6 +37,9 @@ public class InteractionFragment extends Fragment implements
     private GoogleApiClient gac;
     private int count = 0;
 
+    private static final String WEAR_CAPABILITY_NAME = "wear_transcription";
+    private String transcriptionNodeId = null;
+
     public static InteractionFragment newInstance(int sectionNumber)
     {
         InteractionFragment fragmentInstance = new InteractionFragment();
@@ -46,6 +54,38 @@ public class InteractionFragment extends Fragment implements
     public InteractionFragment() {
         // Required empty public constructor
     }
+
+    private void setWearTranscription()
+    {
+        CapabilityApi.GetCapabilityResult result = Wearable
+                .CapabilityApi
+                .getCapability(gac, WEAR_CAPABILITY_NAME, CapabilityApi.FILTER_REACHABLE)
+                .await();
+
+        updateTranscriptionCapability(result.getCapability());
+    }
+
+    private void updateTranscriptionCapability(CapabilityInfo capabilityInfo)
+    {
+        Set<Node> connectedNodes = capabilityInfo.getNodes();
+
+        transcriptionNodeId = pickBestNodeId(connectedNodes);
+    }
+
+    private String pickBestNodeId(Set<Node> nodes)
+    {
+        String bestNodeId = null;
+        // Find a nearby node or pick one arbitrarily
+        for (Node node : nodes)
+        {
+            if (node.isNearby())
+                return node.getId();
+
+            bestNodeId = node.getId();
+        }
+        return bestNodeId;
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)

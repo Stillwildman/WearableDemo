@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="wear_capabilities">
+        <item>wear_transcription</item>
+    </string-array>
+</resources>
